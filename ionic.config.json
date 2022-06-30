@@ -1,0 +1,7 @@
+{
+  "name": "tiktok-feed-plugin",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
