@@ -1,10 +1,18 @@
 <template>
-    <swiper :direction="'vertical'" :slidesPerView="'1'"  :modules="modules" v-bind="swiperSettings" @swiper="onSwiper" @slideChange="onSlideChange">
-        <swiper-slide v-for="video in videos" :key="video.name">
+    <swiper 
+    :direction="'vertical'" 
+    :slidesPerView="'1'"  
+    :modules="modules" 
+    :mousewheel="true"
+    :simulateTouch="false"
+    @swiper="onSwiper" 
+    @slideChange="onSlideChange"
+    >
+        <swiper-slide v-for="video in videos" :key="video.name" class="bg-black">
             <div class="sound-button bg-white w-12 h-12 z-10 absolute left-4 top-[10%] cursor-pointer rounded-full p-2 border border-gray-200" @click="toggleMute">
-                <ion-icon :icon="!isMuted ? volumeHigh : volumeMute" class="text-black w-full h-full cursor-pointer" />
+                <ion-icon :icon="!isMuted ? icons.volumeHigh : icons.volumeMute" class="text-black w-full h-full cursor-pointer" />
             </div>
-            <ion-icon v-if="!isPlaying" :icon="play" class="absolute z-10 text-[#f3f3f3b3] w-16 h-16" @click="togglePlay" />
+            <ion-icon v-if="!isPlaying" :icon="icons.play" class="absolute z-10 text-[#f3f3f3b3] w-16 h-16" @click="togglePlay" />
             <video class="w-full h-full" :poster="video.img" ref="video" @click="togglePlay" loop playsinline webkit-playsinline>
                 <source :src="video.src" type="video/mp4">
                 Video is unsopported!
@@ -17,7 +25,7 @@
 <script>
 import ZReactions from '@/components/z-reactions.vue'
 import axios from 'axios';
-import { IonIcon } from '@ionic/vue'
+import { IonIcon, toastController } from '@ionic/vue'
 import { play, volumeHigh, volumeMute } from 'ionicons/icons';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css/bundle';
@@ -36,11 +44,8 @@ export default {
             isMuted: false,
             swiper: null,
             videos: [],
-            swiperSettings: {
-                mousewheel: true,
-                modules: [Mousewheel]
-            },
-            play, volumeHigh, volumeMute
+            modules: [Mousewheel],
+            icons: { play, volumeHigh, volumeMute }
         }
     },
     async created() {
@@ -78,7 +83,7 @@ export default {
         },
         async loadVideos() {
             try {
-                const resp = (await axios.get(`https://gamechangers.wezeo.dev/cms/api/v1/lesson/feed/recommended/`)).data.data;
+                const { data: { data: resp } } = (await axios.get(`https://gamechangers.wezeo.dev/cms/api/v1/lesson/feed/recommended/`));
                 for (let i = 0; i < resp.length; i++) {
                     const el = resp[i];
                     if (el.content_shot) {
@@ -92,10 +97,19 @@ export default {
                 }
                 console.log(this.videos);
             } catch (error) {
+                this.openToast('Videos not loaded.');
                 console.log(error);
             }
         },
-    },
+        async openToast(text) {
+            const toast = await toastController
+                .create({
+                    message: text,
+                    duration: 2000
+                })
+            return toast.present();
+        },
+    }
 }
 </script>
 

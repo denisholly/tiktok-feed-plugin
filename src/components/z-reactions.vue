@@ -2,25 +2,25 @@
     <div class="w-12 h-72 text-center absolute flex flex-col items-center right-4 bottom-[10%]">
         <div class="icons flex text-white flex-col items-center">
             <div class="my-1">
-                <ion-icon :icon="heart" class="w-8 h-8 drop-shadow icon-default cursor-pointer" @click="like" :class=" !liked ? 'text-white' : 'text-red-500'" />  
+                <ion-icon :icon="icons.heart" class="w-8 h-8 drop-shadow icon-default cursor-pointer" @click="like" :class=" !liked ? 'text-white' : 'text-red-500'" />  
                 <p class="text-sm font-bold drop-shadow text-default">
                     {{ likesAmount }}
                 </p>
             </div>
             <div class="my-1">
-                <ion-icon :icon="chatbubbleEllipses" class="w-8 h-8 drop-shadow icon-default cursor-pointer" id="open-modal"/>  
+                <ion-icon :icon="icons.chatbubbleEllipses" class="w-8 h-8 drop-shadow icon-default cursor-pointer" id="open-modal"/>  
                 <p class="text-sm font-bold drop-shadow text-default">
                     3
                 </p>
             </div>
             <div class="my-1">
-                <ion-icon :icon="bookmark" class="w-8 h-8 drop-shadow icon-default cursor-pointer" @click="saved = !saved" :class=" !saved ? 'text-white' : 'text-yellow-400'" />  
+                <ion-icon :icon="icons.bookmark" class="w-8 h-8 drop-shadow icon-default cursor-pointer" @click="saved = !saved" :class=" !saved ? 'text-white' : 'text-yellow-400'" />  
                 <p class="text-sm font-bold drop-shadow text-default">
                     Uložiť
                 </p>
             </div>
             <div class="my-1" @click="share(data)">
-                <ion-icon :icon="arrowRedo" class="w-8 h-8 drop-shadow icon-default cursor-pointer" />  
+                <ion-icon :icon="icons.arrowRedo" class="w-8 h-8 drop-shadow icon-default cursor-pointer" />  
                 <p class="text-sm font-bold drop-shadow text-default">
                     Zdielať
                 </p>
@@ -42,7 +42,7 @@ export default {
             liked: false,
             likesAmount: this.data.likes,
             saved: false,
-            heart, chatbubbleEllipses, bookmark, arrowRedo 
+            icons: { heart, chatbubbleEllipses, bookmark, arrowRedo } 
         }
     },
     methods: {
