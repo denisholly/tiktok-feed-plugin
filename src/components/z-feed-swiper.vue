@@ -10,11 +10,11 @@
     >
         <swiper-slide v-for="video in videos" :key="video.name" class="bg-black">
             <div class="sound-button bg-white w-12 h-12 z-10 absolute left-4 top-[10%] cursor-pointer rounded-full p-2 border border-gray-200" @click="toggleMute">
-                <ion-icon :icon="!isMuted ? icons.volumeHigh : icons.volumeMute" class="text-black w-full h-full cursor-pointer" />
+                <ion-icon :icon="isMuted ? icons.volumeMute : icons.volumeHigh" class="text-black w-full h-full cursor-pointer" />
             </div>
             <ion-icon v-if="!isPlaying" :icon="icons.play" class="absolute z-10 text-[#f3f3f3b3] w-16 h-16" @click="togglePlay" />
-            <video class="w-full h-full" :poster="video.img" ref="video" @click="togglePlay" loop playsinline webkit-playsinline>
-                <source :src="video.src" type="video/mp4">
+            <video class="w-full h-full" :poster="video.content_thumbnail" ref="video" @click="togglePlay" loop playsinline webkit-playsinline>
+                <source :src="video.content_shot" type="video/mp4">
                 Video is unsopported!
             </video>
             <z-reactions :data="video" />
@@ -84,24 +84,12 @@ export default {
         async loadVideos() {
             try {
                 const { data: { data: resp } } = (await axios.get(`https://gamechangers.wezeo.dev/cms/api/v1/lesson/feed/recommended/`));
-                for (let i = 0; i < resp.length; i++) {
-                    const el = resp[i];
-                    if (el.content_shot) {
-                        this.videos.push({ 
-                            name: el.name,
-                            src: el.content_shot,
-                            likes: el.likes,
-                            img: el.content_thumbnail
-                        });
-                    }
-                }
-                console.log(this.videos);
+                this.videos.push(...resp.filter(content => content.content_shot))
             } catch (error) {
-                this.openToast('Videos not loaded.');
-                console.log(error);
+                this._openToast('Videos not loaded.');
             }
         },
-        async openToast(text) {
+        async _openToast(text) {
             const toast = await toastController
                 .create({
                     message: text,
@@ -114,6 +102,7 @@ export default {
 </script>
 
 <style scoped>
+
 .swiper {
   height: 100%;
 }

@@ -2,7 +2,7 @@
     <div class="w-12 h-72 text-center absolute flex flex-col items-center right-4 bottom-[10%]">
         <div class="icons flex text-white flex-col items-center">
             <div class="my-1">
-                <ion-icon :icon="icons.heart" class="w-8 h-8 drop-shadow icon-default cursor-pointer" @click="like" :class=" !liked ? 'text-white' : 'text-red-500'" />  
+                <ion-icon :icon="icons.heart" class="w-8 h-8 drop-shadow icon-default cursor-pointer" @click="like" :class=" liked ? 'text-red-500' : 'text-white' " />  
                 <p class="text-sm font-bold drop-shadow text-default">
                     {{ likesAmount }}
                 </p>
@@ -14,7 +14,7 @@
                 </p>
             </div>
             <div class="my-1">
-                <ion-icon :icon="icons.bookmark" class="w-8 h-8 drop-shadow icon-default cursor-pointer" @click="saved = !saved" :class=" !saved ? 'text-white' : 'text-yellow-400'" />  
+                <ion-icon :icon="icons.bookmark" class="w-8 h-8 drop-shadow icon-default cursor-pointer" @click="saved = !saved" :class=" saved ? 'text-yellow-400' : 'text-white' " />  
                 <p class="text-sm font-bold drop-shadow text-default">
                     Uložiť
                 </p>
@@ -47,7 +47,7 @@ export default {
     },
     methods: {
         like() {
-            !this.liked ? this.likesAmount++ : this.likesAmount--;
+            this.liked ? this.likesAmount-- : this.likesAmount++;
             this.liked = !this.liked;
         },
         share(video) {
